@@ -259,5 +259,61 @@ def simple_derivative(data):
     return a
 
 
-def count_high_rain_low_tests_days(input_data):
-    raise NotImplementedError
+def count_high_rain_low_tests_days(input_data,window=7):
+    a = [] #降水
+    b = [] #检查人数
+    c = []
+    d = []
+    #不用专门设置变量？？
+    e = int((window+1)/2)
+    
+    x = input_data['metadata']['age_binning']['population'] #年龄段
+    y = input_data['region']['population']['age'] #各年龄段总人数
+    z = input_data['evolution'].keys() #年份
+    
+    for i in range(len(z)):
+        a.append(input_data['evolution'][list(z)[i]]['weather']['rainfall'])
+        b.append(input_data['evolution'][list(z)[i]]['epidemiology']['tested']['new']['all'])
+     
+    a1 = compute_running_average(a, window)
+    b1 = compute_running_average(b, window)
+    
+    a2 = simple_derivative(a1)
+    b2 = simple_derivative(b1) 
+    
+    # 降水上升
+    for i in range(0,e):
+        c.append(False)
+    
+    for i in range(e,len(z)-e+1):
+        if a2[i] > 0:
+            c.append(True)
+        else:
+            c.append(False)
+        
+    for i in range(len(z)-e+1,len(z)):
+        c.append(False)
+    
+    c1 = sum(c)
+        
+    if c1 == 0:
+        ratio = 0
+    else:
+        # test人数下降
+        for i in range(0,e):
+            d.append(False)
+    
+        for i in range(e,len(z)-e+1):
+            if a2[i] > 0 and b2[i] < 0:
+                d.append(True)
+            else:
+                d.append(False)
+        
+        for i in range(len(z)-e+1,len(z)):
+            d.append(False)
+    
+        d1 = sum(d)
+    
+        ratio = d1/c1
+        
+    return ratio
