@@ -99,8 +99,10 @@ def generate_data_plot_confirmed(input_data, sex=False, max_ages=[], status='tot
     
         data_time = [datetime.strptime(d, '%Y-%m-%d').date() for d in list(z)]
         result = [data_time,f,data_time,g]
+    elif sex != False:
+        result = 'Input sex is error'
     
-    elif max_ages != []:
+    elif type(max_ages).__name__ == 'list' and len(max_ages) >= 1:
         for m in range(len(z)):
             for i in range(len(max_ages)):
                 for j in range(len(x)):
@@ -121,7 +123,7 @@ def generate_data_plot_confirmed(input_data, sex=False, max_ages=[], status='tot
         
         data_time = [datetime.strptime(d, '%Y-%m-%d').date() for d in list(z)]
     else:
-        result = 'Error: No age regions provided'
+        result = 'Input max_age is error'
     
     for i in range(len(max_ages)):
         result.append(data_time)
@@ -139,7 +141,7 @@ def create_confirmed_plot(input_data, sex=False, max_ages=[], status='total', sa
     fig = plt.figure(figsize=(10, 10))
     
     if sex == True:
-        type = 'sex'
+        r = 'sex'
         a = generate_data_plot_confirmed(input_data, sex, max_ages, status)
         
         if status == 'total':
@@ -149,11 +151,11 @@ def create_confirmed_plot(input_data, sex=False, max_ages=[], status='total', sa
             plt.plot(a[0],a[1],color='green',label=status + ' male', linestyle='--')
             plt.plot(a[2],a[3],color='purple',label=status + ' female', linestyle='--')    
     
-    if sex != True and sex != False: #有待测试
-        return "Input is error"
+    if sex != False: #有待测试
+        return "Input sex is error"
         
-    if max_ages != []:
-        type = 'age'
+    if type(max_ages).__name__ == 'list' and len(max_ages) >= 1:
+        r = 'age'
         a = generate_data_plot_confirmed(input_data, sex, max_ages, status)
         
         if status == 'total':
@@ -175,7 +177,9 @@ def create_confirmed_plot(input_data, sex=False, max_ages=[], status='total', sa
                 elif 50 < max_ages[int(i/2)] <= 75:
                     plt.plot(a[i],a[i+1],label=status + ' younger than ' + str(max_ages[int(i/2)]), color='purple', linestyle='--')
                 else:
-                    plt.plot(a[i],a[i+1],label=status + ' younger than ' + str(max_ages[int(i/2)]), color='pink', linestyle='--')  
+                    plt.plot(a[i],a[i+1],label=status + ' younger than ' + str(max_ages[int(i/2)]), color='pink', linestyle='--')
+    else:
+        return "Input age_max is error"
     
     region = input_data['region']['name']
     fig.autofmt_xdate()  # To show dates nicely
