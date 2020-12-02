@@ -88,9 +88,6 @@ def generate_data_plot_confirmed(input_data, sex=False, max_ages=[], status='tot
     y = input_data['region']['population']['age'] #各年龄段总人数
     z = input_data['evolution'].keys() #年份
     l = input_data['metadata']['age_binning']['hospitalizations'] #住院年龄段
-    
-    for i in range(len(max_ages)):
-        h.append([])
 
     if sex == True:
         for i in range(len(z)):
@@ -99,10 +96,18 @@ def generate_data_plot_confirmed(input_data, sex=False, max_ages=[], status='tot
     
         data_time = [datetime.strptime(d, '%Y-%m-%d').date() for d in list(z)]
         result = [data_time,f,data_time,g]
+
+        for i in range(len(max_ages)):
+            result.append(data_time)
+            result.append(h[i])
+
     elif sex != False:
         result = 'Input sex is error'
     
     elif type(max_ages).__name__ == 'list' and len(max_ages) >= 1:
+        for i in range(len(max_ages)):
+            h.append([])
+
         for m in range(len(z)):
             for i in range(len(max_ages)):
                 for j in range(len(x)):
@@ -122,12 +127,12 @@ def generate_data_plot_confirmed(input_data, sex=False, max_ages=[], status='tot
                     h[k].append(sum(n))
         
         data_time = [datetime.strptime(d, '%Y-%m-%d').date() for d in list(z)]
+
+        for i in range(len(max_ages)):
+            result.append(data_time)
+            result.append(h[i])
     else:
         result = 'Input max_age is error'
-    
-    for i in range(len(max_ages)):
-        result.append(data_time)
-        result.append(h[i])
      
     return result
 
@@ -189,7 +194,7 @@ def create_confirmed_plot(input_data, sex=False, max_ages=[], status='total', sa
     plt.legend()
     
     if save == True:
-        plt.savefig(region + '_evolution_cases_' + type + '.png') #???
+        plt.savefig(region + '_evolution_cases_' + r + '.png') #???
 
     plt.show()
 
