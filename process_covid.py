@@ -242,7 +242,22 @@ def simple_derivative(data):
 
 
 def simple_derivative(data):
-    raise NotImplementedError
+    # data is a list
+    a = []
+    
+    a.append(None)
+    
+    for i in range(1,len(data)):
+        e = data[i-1:i+1]
+        o = sum(p is None for p in e)
+        
+        if o > 0:
+            a.append(None)
+        else:
+            a.append(data[i]-data[i-1])
+    
+    return a
+
 
 def count_high_rain_low_tests_days(input_data):
     raise NotImplementedError
