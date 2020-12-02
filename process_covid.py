@@ -54,7 +54,29 @@ def cases_per_population_by_age(input_data):
     return a
 
 def hospital_vs_confirmed(input_data):
-    raise NotImplementedError
+    x = input_data['metadata']['age_binning']['population'] #年龄段
+    y = input_data['region']['population']['age'] #各年龄段总人数
+    z = input_data['evolution'].keys() #年份
+    f = []
+    g = list(z)
+    h = []
+    o = []
+    
+    for i in range(len(z)):
+        d = input_data['evolution'][list(z)[i]]['hospitalizations']['hospitalized']['new']['all']
+        e = input_data['evolution'][list(z)[i]]['epidemiology']['confirmed']['new']['all']
+        if e == 0 or e == None or d == None:
+            f.append(None)
+        else:
+            f.append(d/e)
+    
+    for j in range(len(z)):
+        if f[j] != None:
+            h.append(f[j])
+            o.append(g[j])
+    
+    r = (o,h)   
+    return r
 
 def generate_data_plot_confirmed(input_data, sex, max_age, status):
     """
