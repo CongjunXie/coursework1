@@ -5,7 +5,53 @@ def load_covid_data(filepath):
     return json,loads(open(filepath).read())
 
 def cases_per_population_by_age(input_data):
-    raise NotImplementedError
+    x=input_data['metadata']['age_binning']['population']
+    y = input_data['region']['population']['age']
+    z = input_data['evolution'].keys()
+    l = input_data['metadata']['age_binning']['hospitalizations']
+
+    if l == []:
+        a = 'Error: No regions provided'
+    elif list(set(x).intersection(set(l))) == []:
+        a = 'Error: cannot rebin'
+    elif all(y) == False:
+        a = 'Error: no population provided'
+    else:
+        a = {}
+        b = []
+
+        for m in range(len(x)):
+            a.update({x[m]:[]})
+        for n in range(len(x)):
+            b.append([])
+        
+        if len(x) > len(l):
+            for k in range(len(l)):
+                if x[k] != l[k]:
+                    y[k] = [y[k][p]+y[k+1][p] for p in range(len(y[k]))]
+            for i in range(len(x)):
+                for j in range(len(z)):
+                    c = input_data['evolution'][list(z)[j]]['epidemiology']['confirmed']['total']['age']
+                    b[i].append(c[i]/y[i])
+                    a[x[i]].append((list(z)[j],b[i][j]))
+        elif len(x) < len(l):
+            for i in range(len(x)):
+                for j in range(len(z)):
+                    c = input_data['evolution'][list(z)[j]]['epidemiology']['confirmed']['total']['age']
+                    for q in range(len(l)):
+                        if c[q] == None:
+                            c[q] = 0
+                    if x[i] != l[i]:
+                        c[i] = c[i] + c[i+1]
+                    b[i].append(c[i]/y[i])
+                    a[x[i]].append((list(z)[j],b[i][j]))
+        else:
+            for i in range(len(x)):
+                for j in range(len(z)):
+                    c = input_data['evolution'][list(z)[j]]['epidemiology']['confirmed']['total']['age']
+                    b[i].append(c[i]/y[i])
+                    a[x[i]].append((list(z)[j],b[i][j]))
+    return a
 
 def hospital_vs_confirmed(input_data):
     raise NotImplementedError
