@@ -156,10 +156,10 @@ def create_confirmed_plot(input_data, sex=False, max_ages=[], status='total', sa
             plt.plot(a[0],a[1],color='green',label=status + ' male', linestyle='--')
             plt.plot(a[2],a[3],color='purple',label=status + ' female', linestyle='--')    
     
-    if sex != False: #有待测试
+    elif sex != True and sex != False: #有待测试
         return "Input sex is error"
         
-    if type(max_ages).__name__ == 'list' and len(max_ages) >= 1:
+    elif type(max_ages).__name__ == 'list' and len(max_ages) >= 1:
         r = 'age'
         a = generate_data_plot_confirmed(input_data, sex, max_ages, status)
         
@@ -206,29 +206,32 @@ def compute_running_average(data, window):
     d = []
     f = []
     
-    for i in range(len(data)):
-        f.append([])
+    if window%2 == 0: #_____________________________________________________
+        d = 'Input window is even, cannot be used to compute'
+    else:
+        for i in range(len(data)):
+            f.append([])
     
-    for i in range(0,b):
-        d.append(None)
+        for i in range(0,b):
+            d.append(None)
         
-    for i in range(b,c+1):
-        e = data[i-a+1:i+a]
-        o = sum(p is None for p in e)
+        for i in range(b,c+1):
+            e = data[i-a+1:i+a]
+            o = sum(p is None for p in e)
         
-        if window-o == 0:
-            d.append(0)
-        else:
-            for j in range(i-a+1,i+a):
-                if data[j] == None:
-                    f[i].append(0)
-                else:
-                    f[i].append(data[j])
+            if window-o == 0:
+                d.append(0)
+            else:
+                for j in range(i-a+1,i+a):
+                    if data[j] == None:
+                        f[i].append(0)
+                    else:
+                        f[i].append(data[j])
                 
-            d.append(sum(f[i])/(window-o))
+                d.append(sum(f[i])/(window-o))
     
-    for i in range(c+1,len(data)):
-        d.append(None)
+        for i in range(c+1,len(data)):
+            d.append(None)
         
     return d
 
@@ -249,25 +252,6 @@ def simple_derivative(data):
     
     return a
 
-
-def simple_derivative(data):
-    # data is a list
-    a = []
-    
-    a.append(None)
-    
-    for i in range(1,len(data)):
-        e = data[i-1:i+1]
-        o = sum(p is None for p in e)
-        
-        if o > 0:
-            a.append(None)
-        else:
-            a.append(data[i]-data[i-1])
-    
-    return a
-
-
 def count_high_rain_low_tests_days(input_data,window=7):
     a = [] #降水
     b = [] #检查人数
@@ -280,49 +264,52 @@ def count_high_rain_low_tests_days(input_data,window=7):
     y = input_data['region']['population']['age'] #各年龄段总人数
     z = input_data['evolution'].keys() #年份
     
-    for i in range(len(z)):
-        a.append(input_data['evolution'][list(z)[i]]['weather']['rainfall'])
-        b.append(input_data['evolution'][list(z)[i]]['epidemiology']['tested']['new']['all'])
-     
-    a1 = compute_running_average(a, window)
-    b1 = compute_running_average(b, window)
-    
-    a2 = simple_derivative(a1)
-    b2 = simple_derivative(b1) 
-    
-    # 降水上升
-    for i in range(0,e):
-        c.append(False)
-    
-    for i in range(e,len(z)-e+1):
-        if a2[i] > 0:
-            c.append(True)
-        else:
-            c.append(False)
-        
-    for i in range(len(z)-e+1,len(z)):
-        c.append(False)
-    
-    c1 = sum(c)
-        
-    if c1 == 0:
-        ratio = 0
+    if window%2 == 0:
+        ratio = 'Input window is even, cannot be used to compute'
     else:
-        # test人数下降
+        for i in range(len(z)):
+            a.append(input_data['evolution'][list(z)[i]]['weather']['rainfall'])
+            b.append(input_data['evolution'][list(z)[i]]['epidemiology']['tested']['new']['all'])
+     
+        a1 = compute_running_average(a, window)
+        b1 = compute_running_average(b, window)
+    
+        a2 = simple_derivative(a1)
+        b2 = simple_derivative(b1) 
+    
+        # 降水上升
         for i in range(0,e):
-            d.append(False)
+            c.append(False)
     
         for i in range(e,len(z)-e+1):
-            if a2[i] > 0 and b2[i] < 0:
-                d.append(True)
+            if a2[i] > 0:
+                c.append(True)
             else:
-                d.append(False)
+                c.append(False)
         
         for i in range(len(z)-e+1,len(z)):
-            d.append(False)
+            c.append(False)
     
-        d1 = sum(d)
+        c1 = sum(c)
+        
+        if c1 == 0:
+            ratio = 0
+        else:
+            # test人数下降
+            for i in range(0,e):
+                d.append(False)
     
-        ratio = d1/c1
+            for i in range(e,len(z)-e+1):
+                if a2[i] > 0 and b2[i] < 0:
+                    d.append(True)
+                else:
+                    d.append(False)
+        
+            for i in range(len(z)-e+1,len(z)):
+                d.append(False)
+    
+            d1 = sum(d)
+    
+            ratio = d1/c1
         
     return ratio
