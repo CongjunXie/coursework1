@@ -190,7 +190,56 @@ def create_confirmed_plot(input_data, sex=False, max_ages=[], status='total', sa
     plt.show()
 
 def compute_running_average(data, window):
-    raise NotImplementedError
+    # data is a list and window is odd
+    a = int((window+1)/2)
+    b = a-1
+    c = len(data)-a 
+    d = []
+    f = []
+    
+    for i in range(len(data)):
+        f.append([])
+    
+    for i in range(0,b):
+        d.append(None)
+        
+    for i in range(b,c+1):
+        e = data[i-a+1:i+a]
+        o = sum(p is None for p in e)
+        
+        if window-o == 0:
+            d.append(0)
+        else:
+            for j in range(i-a+1,i+a):
+                if data[j] == None:
+                    f[i].append(0)
+                else:
+                    f[i].append(data[j])
+                
+            d.append(sum(f[i])/(window-o))
+    
+    for i in range(c+1,len(data)):
+        d.append(None)
+        
+    return d
+
+def simple_derivative(data):
+    # data is a list
+    a = []
+    
+    a.append(None)
+    
+    for i in range(1,len(data)):
+        e = data[i-1:i+1]
+        o = sum(p is None for p in e)
+        
+        if o > 0:
+            a.append(None)
+        else:
+            a.append(data[i]-data[i-1])
+    
+    return a
+
 
 def simple_derivative(data):
     raise NotImplementedError
