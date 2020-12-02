@@ -14,7 +14,43 @@ data_er = load_covid_data(data_directory / data_file)
 
 #def tset_load_covid_data: #throws a meaningful error if the structure of the file doesn’t match with what’s expected.
     
-#def test_hospital_vs_confirmed: #produces the expected output even when some values are missing
+def test_hospital_vs_confirmed(): #creat a set of data myself and change the variables
+    input_data = {'evolution':
+    {'2020-03-16':
+        {'hospitalizations':{'hospitalized':{'new':{'all':10}}},
+        'epidemiology':{'confirmed':{'new':{'all':5}}}},
+    '2020-03-17':
+        {'hospitalizations':{'hospitalized':{'new':{'all':20}}},
+        'epidemiology':{'confirmed':{'new':{'all':20}}}},
+    '2020-03-18':
+        {'hospitalizations':{'hospitalized':{'new':{'all':None}}},
+        'epidemiology':{'confirmed':{'new':{'all':7}}}},
+    '2020-03-19':
+        {'hospitalizations':{'hospitalized':{'new':{'all':13}}},
+        'epidemiology':{'confirmed':{'new':{'all':None}}}},   
+    '2020-03-20':
+        {'hospitalizations':{'hospitalized':{'new':{'all':12}}},
+        'epidemiology':{'confirmed':{'new':{'all':0}}}}}}
+
+    assert hospital_vs_confirmed(input_data) == (['2020-03-16','2020-03-17'],[2,1])
+
+    input_data = {'evolution':
+    {'2020-03-16':
+        {'hospitalizations':{'hospitalized':{'new':{'all':None}}},
+        'epidemiology':{'confirmed':{'new':{'all':None}}}},
+    '2020-03-17':
+        {'hospitalizations':{'hospitalized':{'new':{'all':20}}},
+        'epidemiology':{'confirmed':{'new':{'all':20}}}},
+    '2020-03-18':
+        {'hospitalizations':{'hospitalized':{'new':{'all':3}}},
+        'epidemiology':{'confirmed':{'new':{'all':7}}}},
+    '2020-03-19':
+        {'hospitalizations':{'hospitalized':{'new':{'all':13}}},
+        'epidemiology':{'confirmed':{'new':{'all':None}}}},   
+    '2020-03-20':
+        {'hospitalizations':{'hospitalized':{'new':{'all':12}}},
+        'epidemiology':{'confirmed':{'new':{'all':1}}}}}}
+    assert hospital_vs_confirmed(input_data) == (['2020-03-17','2020-03-18','2020-03-20'],[1,3/7,12])
     
 def test_incorrect_sex_generate_data_plot_confirm(): #throws a meaningful error when an input argument is not correct(e.g., sex=4)
     assert generate_data_plot_confirmed(data_er, sex=4) == 'Input sex is error'
