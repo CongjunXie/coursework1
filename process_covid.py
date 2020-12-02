@@ -2,7 +2,7 @@
 
 def load_covid_data(filepath):
     import json
-    return json,loads(open(filepath).read())
+    return json.loads(open(filepath).read())
 
 def cases_per_population_by_age(input_data):
     x=input_data['metadata']['age_binning']['population']
