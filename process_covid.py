@@ -1,5 +1,3 @@
-# FIXME add needed imports
-
 def load_covid_data(filepath):
     import json
     return json.loads(open(filepath).read())
@@ -54,9 +52,9 @@ def cases_per_population_by_age(input_data):
     return a
 
 def hospital_vs_confirmed(input_data):
-    x = input_data['metadata']['age_binning']['population'] #年龄段
-    y = input_data['region']['population']['age'] #各年龄段总人数
-    z = input_data['evolution'].keys() #年份
+    x = input_data['metadata']['age_binning']['population']
+    y = input_data['region']['population']['age']
+    z = input_data['evolution'].keys()
     f = []
     g = list(z)
     h = []
@@ -84,10 +82,10 @@ def generate_data_plot_confirmed(input_data, sex=False, max_ages=[], status='tot
     g=[]
     h=[]
     result=[]
-    x = input_data['metadata']['age_binning']['population'] #年龄段
-    y = input_data['region']['population']['age'] #各年龄段总人数
-    z = input_data['evolution'].keys() #年份
-    l = input_data['metadata']['age_binning']['hospitalizations'] #住院年龄段
+    x = input_data['metadata']['age_binning']['population']
+    y = input_data['region']['population']['age']
+    z = input_data['evolution'].keys()
+    l = input_data['metadata']['age_binning']['hospitalizations']
 
     if sex == True:
         for i in range(len(z)):
@@ -138,11 +136,10 @@ def generate_data_plot_confirmed(input_data, sex=False, max_ages=[], status='tot
 
 def create_confirmed_plot(input_data, sex=False, max_ages=[], status='total', save=False):
     from matplotlib import pyplot as plt
-    x = input_data['metadata']['age_binning']['population'] #年龄段
-    y = input_data['region']['population']['age'] #各年龄段总人数
-    z = input_data['evolution'].keys() #年份
+    x = input_data['metadata']['age_binning']['population']
+    y = input_data['region']['population']['age']
+    z = input_data['evolution'].keys()
     
-    # FIXME check that only sex or age is specified.
     fig = plt.figure(figsize=(10, 10))
     
     if sex == True:
@@ -156,7 +153,7 @@ def create_confirmed_plot(input_data, sex=False, max_ages=[], status='total', sa
             plt.plot(a[0],a[1],color='green',label=status + ' male', linestyle='--')
             plt.plot(a[2],a[3],color='purple',label=status + ' female', linestyle='--')    
     
-    elif sex != True and sex != False: #有待测试
+    elif sex != True and sex != False:
         return "Input sex is error"
         
     elif type(max_ages).__name__ == 'list' and len(max_ages) >= 1:
@@ -188,13 +185,13 @@ def create_confirmed_plot(input_data, sex=False, max_ages=[], status='total', sa
     
     region = input_data['region']['name']
     fig.autofmt_xdate()  # To show dates nicely
-    plt.title('Confirmed cases in ' + region) #???
+    plt.title('Confirmed cases in ' + region)
     plt.xlabel('data')
     plt.ylabel('cases')
     plt.legend()
     
     if save == True:
-        plt.savefig(region + '_evolution_cases_' + r + '.png') #???
+        plt.savefig(region + '_evolution_cases_' + r + '.png')
 
     plt.show()
 
@@ -206,7 +203,7 @@ def compute_running_average(data, window):
     d = []
     f = []
     
-    if window%2 == 0: #_____________________________________________________
+    if window%2 == 0:
         d = 'Input window is even, cannot be used to compute'
     else:
         for i in range(len(data)):
@@ -253,16 +250,15 @@ def simple_derivative(data):
     return a
 
 def count_high_rain_low_tests_days(input_data,window=7):
-    a = [] #降水
-    b = [] #检查人数
+    a = []
+    b = []
     c = []
     d = []
-    #不用专门设置变量？？
     e = int((window+1)/2)
     
-    x = input_data['metadata']['age_binning']['population'] #年龄段
-    y = input_data['region']['population']['age'] #各年龄段总人数
-    z = input_data['evolution'].keys() #年份
+    x = input_data['metadata']['age_binning']['population']
+    y = input_data['region']['population']['age']
+    z = input_data['evolution'].keys()
     
     if window%2 == 0:
         ratio = 'Input window is even, cannot be used to compute'
@@ -277,7 +273,6 @@ def count_high_rain_low_tests_days(input_data,window=7):
         a2 = simple_derivative(a1)
         b2 = simple_derivative(b1) 
     
-        # 降水上升
         for i in range(0,e):
             c.append(False)
     
@@ -295,7 +290,7 @@ def count_high_rain_low_tests_days(input_data,window=7):
         if c1 == 0:
             ratio = 0
         else:
-            # test人数下降
+            
             for i in range(0,e):
                 d.append(False)
     
