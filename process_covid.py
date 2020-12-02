@@ -1,7 +1,8 @@
 # FIXME add needed imports
 
 def load_covid_data(filepath):
-    raise NotImplementedError
+    import json
+    return json,loads(open(filepath).read())
 
 def cases_per_population_by_age(input_data):
     raise NotImplementedError
