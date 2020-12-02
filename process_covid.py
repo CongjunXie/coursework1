@@ -129,24 +129,64 @@ def generate_data_plot_confirmed(input_data, sex=False, max_age=[], status='tota
      
     return result
 
-def create_confirmed_plot(input_data, sex=False, max_ages=[], status=..., save=...):
+def create_confirmed_plot(input_data, sex=False, max_ages=[], status='total', save=False):
+    from matplotlib import pyplot as plt
+    x = input_data['metadata']['age_binning']['population'] #年龄段
+    y = input_data['region']['population']['age'] #各年龄段总人数
+    z = input_data['evolution'].keys() #年份
+    
     # FIXME check that only sex or age is specified.
     fig = plt.figure(figsize=(10, 10))
-    # FIXME change logic so this runs only when the sex plot is required
-    for sex in ['male', 'female']:
-        # FIXME need to change `changeme` so it uses generate_data_plot_confirmed
-        plt.plot('date', 'value', changeme)
-    # FIXME change logic so this runs only when the age plot is required
-    for age in max_ages:
-        # FIXME need to change `changeme` so it uses generate_data_plot_confirmed
-        plt.plot('date', 'value', changeme)
+    
+    if sex == True:
+        type = 'sex'
+        a = generate_data_plot_confirmed(input_data, sex, max_ages, status)
+        
+        if status == 'total':
+            plt.plot(a[0],a[1],color='green',label=status + ' male', linestyle='-')
+            plt.plot(a[2],a[3],color='purple',label=status + ' female', linestyle='-')
+        else:
+            plt.plot(a[0],a[1],color='green',label=status + ' male', linestyle='--')
+            plt.plot(a[2],a[3],color='purple',label=status + ' female', linestyle='--')    
+    
+    if sex != True and sex != False: #有待测试
+        return "Input is error"
+        
+    if max_ages != []:
+        type = 'age'
+        a = generate_data_plot_confirmed(input_data, sex, max_ages, status)
+        
+        if status == 'total':
+            for i in range(0,2*len(max_ages),2):
+                if max_ages[int(i/2)] <= 25:
+                    plt.plot(a[i],a[i+1],label=status + ' younger than ' + str(max_ages[int(i/2)]), color='green', linestyle='-')
+                elif 25 < max_ages[int(i/2)] <= 50:
+                    plt.plot(a[i],a[i+1],label=status + ' younger than ' + str(max_ages[int(i/2)]), color='orange', linestyle='-')
+                elif 50 < max_ages[int(i/2)] <= 75:
+                    plt.plot(a[i],a[i+1],label=status + ' younger than ' + str(max_ages[int(i/2)]), color='purple', linestyle='-')
+                else:
+                    plt.plot(a[i],a[i+1],label=status + ' younger than ' + str(max_ages[int(i/2)]), color='pink', linestyle='-')
+        else:
+            for i in range(0,2*len(max_ages),2):
+                if max_ages[int(i/2)] <= 25:
+                    plt.plot(a[i],a[i+1],label=status + ' younger than ' + str(max_ages[int(i/2)]), color='green', linestyle='--')
+                elif 25 < max_ages[int(i/2)] <= 50:
+                    plt.plot(a[i],a[i+1],label=status + ' younger than ' + str(max_ages[int(i/2)]), color='orange', linestyle='--')
+                elif 50 < max_ages[int(i/2)] <= 75:
+                    plt.plot(a[i],a[i+1],label=status + ' younger than ' + str(max_ages[int(i/2)]), color='purple', linestyle='--')
+                else:
+                    plt.plot(a[i],a[i+1],label=status + ' younger than ' + str(max_ages[int(i/2)]), color='pink', linestyle='--')  
+    
+    region = input_data['region']['name']
     fig.autofmt_xdate()  # To show dates nicely
-    # TODO add title with "Confirmed cases in ..."
-    # TODO Add x label to inform they are dates
-    # TODO Add y label to inform they are number of cases
-    # TODO Add legend
-    # TODO Change logic to show or save it into a '{region_name}_evolution_cases_{type}.png'
-    #      where type may be sex or age
+    plt.title('Confirmed cases in ' + region) #???
+    plt.xlabel('data')
+    plt.ylabel('cases')
+    plt.legend()
+    
+    if save == True:
+        plt.savefig(region + '_evolution_cases_' + type + '.png') #???
+
     plt.show()
 
 def compute_running_average(data, window):
