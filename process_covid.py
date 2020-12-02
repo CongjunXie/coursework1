@@ -52,8 +52,6 @@ def cases_per_population_by_age(input_data):
     return a
 
 def hospital_vs_confirmed(input_data):
-    x = input_data['metadata']['age_binning']['population']
-    y = input_data['region']['population']['age']
     z = input_data['evolution'].keys()
     f = []
     g = list(z)
