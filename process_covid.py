@@ -78,14 +78,56 @@ def hospital_vs_confirmed(input_data):
     r = (o,h)   
     return r
 
-def generate_data_plot_confirmed(input_data, sex, max_age, status):
-    """
-    At most one of sex or max_age allowed at a time.
-    sex: only 'male' or 'female'
-    max_age: sums all bins below this value, including the one it is in.
-    status: 'new' or 'total' (default: 'total')
-    """
-    raise NotImplementedError
+def generate_data_plot_confirmed(input_data, sex=False, max_age=[], status='total'):
+    from datetime import datetime
+    f=[]
+    g=[]
+    h=[]
+    result=[]
+    x = input_data['metadata']['age_binning']['population'] #年龄段
+    y = input_data['region']['population']['age'] #各年龄段总人数
+    z = input_data['evolution'].keys() #年份
+    l = input_data['metadata']['age_binning']['hospitalizations'] #住院年龄段
+    
+    for i in range(len(max_ages)):
+        h.append([])
+
+    if sex == True:
+        for i in range(len(z)):
+            f.append(input_data['evolution'][list(z)[i]]['epidemiology']['confirmed'][status]['male'])
+            g.append(input_data['evolution'][list(z)[i]]['epidemiology']['confirmed'][status]['female'])
+    
+        data_time = [datetime.strptime(d, '%Y-%m-%d').date() for d in list(z)]
+        result = [data_time,f,data_time,g]
+    
+    elif max_ages != []:
+        for m in range(len(z)):
+            for i in range(len(max_ages)):
+                for j in range(len(x)):
+                    if max_ages[i] <= abs(eval(x[0]))*(j+1):
+                        n = input_data['evolution'][list(z)[m]]['epidemiology']['confirmed'][status]['age']
+                        
+                        for q in range(len(l)):
+                            if n[q] == None:
+                                n[q] = 0
+                        
+                        h[i].append(sum(n[0:j+1]))
+                        break
+        for k in range(len(max_ages)):
+            if h[k] == []:
+                 for m in range(len(z)):
+                    n = input_data['evolution'][list(z)[m]]['epidemiology']['confirmed'][status]['age']
+                    h[k].append(sum(n))
+        
+        data_time = [datetime.strptime(d, '%Y-%m-%d').date() for d in list(z)]
+    else:
+        result = 'Error: No age regions provided'
+    
+    for i in range(len(max_ages)):
+        result.append(data_time)
+        result.append(h[i])
+     
+    return result
 
 def create_confirmed_plot(input_data, sex=False, max_ages=[], status=..., save=...):
     # FIXME check that only sex or age is specified.
