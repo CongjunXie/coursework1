@@ -78,7 +78,7 @@ def hospital_vs_confirmed(input_data):
     r = (o,h)   
     return r
 
-def generate_data_plot_confirmed(input_data, sex=False, max_age=[], status='total'):
+def generate_data_plot_confirmed(input_data, sex=False, max_ages=[], status='total'):
     from datetime import datetime
     f=[]
     g=[]
