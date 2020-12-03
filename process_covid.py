@@ -352,23 +352,18 @@ def count_high_rain_low_tests_days(input_data,window=7):
             a.append(input_data['evolution'][list(z)[i]]['weather']['rainfall'])
             b.append(input_data['evolution'][list(z)[i]]['epidemiology']['tested']['new']['all'])
      
-        a1 = compute_running_average(a, window)
+        a1 = a # weather don't need to be averaged
         b1 = compute_running_average(b, window)
     
         a2 = simple_derivative(a1)
         b2 = simple_derivative(b1) 
     
-        for i in range(0,e):
-            c.append(False)
-    
-        for i in range(e,len(z)-e+1):
+        c.append(False)
+        for i in range(1,len(z)):
             if a2[i] > 0:
                 c.append(True)
             else:
                 c.append(False)
-        
-        for i in range(len(z)-e+1,len(z)):
-            c.append(False)
     
         c1 = sum(c)
         
