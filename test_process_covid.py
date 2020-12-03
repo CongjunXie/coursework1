@@ -14,7 +14,7 @@ data_er = load_covid_data(data_directory / data_file)
 
 #def tset_load_covid_data: #throws a meaningful error if the structure of the file doesn’t match with what’s expected.
     
-def test_hospital_vs_confirmed(): #creat a set of data myself and change the variables
+def test_hospital_vs_confirmed(): #create a set of data myself and change the variables
     input_data = {'evolution':
     {'2020-03-16':
         {'hospitalizations':{'hospitalized':{'new':{'all':10}}},
