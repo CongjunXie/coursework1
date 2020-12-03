@@ -4,11 +4,11 @@ def load_covid_data(filepath):
     date = data['evolution'].keys()
 
     if sorted(list(data.keys())) != sorted(['metadata', 'region', 'evolution']):
-        return 'Error1'
+        return 'Error'
     elif sorted(list(data['metadata'].keys())) != sorted(['time-range', 'age_binning']):
-        return 'Error2'
+        return 'Error'
     elif sorted(list(data['metadata']['time-range'].keys())) != sorted(['start_date', 'stop_date']):
-        return 'Error3'
+        return 'Error'
     elif sorted(list(data['metadata']['age_binning'].keys())) != sorted(['hospitalizations', 'population']):
         return 'Error'
     elif sorted(list(data['region'].keys())) != sorted(['name', 'key', 'latitude', 'longitude', 'elevation', 'area', 'population', 'open_street_maps', 'noaa_station', 'noaa_distance']):
