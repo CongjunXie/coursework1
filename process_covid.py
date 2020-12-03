@@ -294,8 +294,11 @@ def compute_running_average(data, window):
     d = []
     f = []
     
+    class InputError(Exception):
+        pass
+
     if window%2 == 0:
-        d = 'Input window is even, cannot be used to compute'
+        raise InputError('Input window is even, cannot be used to compute')
     else:
         for i in range(len(data)):
             f.append([])
@@ -348,8 +351,11 @@ def count_high_rain_low_tests_days(input_data,window=7):
     e = int((window+1)/2)
     date = input_data['evolution'].keys()
 
+    class InputError(Exception):
+        pass
+
     if window%2 == 0:
-        ratio = 'Input window is even, cannot be used to compute'
+        raise InputError('Input window is even, cannot be used to compute')
     else:
         for i in range(len(date)):
             a.append(input_data['evolution'][list(date)[i]]['weather']['rainfall'])
