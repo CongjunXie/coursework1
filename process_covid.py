@@ -357,9 +357,10 @@ def count_high_rain_low_tests_days(input_data,window=7):
     
         a2 = simple_derivative(a1)
         b2 = simple_derivative(b1) 
-    
-        c.append(False)
-        for i in range(1,len(z)):
+
+        for i in range(0,e):
+            c.append(False)
+        for i in range(e,len(z)-e+1):
             if a2[i] > 0:
                 c.append(True)
             else:
