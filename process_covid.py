@@ -204,7 +204,7 @@ def generate_data_plot_confirmed(input_data, sex=False, max_ages=[], status='tot
                         
                         h[i].append(sum(n[0:j+1]))
                         break
-                    
+
         for k in range(len(max_ages)):
             if h[k] == []:
                  for m in range(len(date)):
@@ -224,10 +224,7 @@ def generate_data_plot_confirmed(input_data, sex=False, max_ages=[], status='tot
 
 def create_confirmed_plot(input_data, sex=False, max_ages=[], status='total', save=False):
     from matplotlib import pyplot as plt
-    x = input_data['metadata']['age_binning']['population']
-    y = input_data['region']['population']['age']
-    z = input_data['evolution'].keys()
-    
+
     fig = plt.figure(figsize=(10, 10))
     
     if sex == True:
@@ -343,17 +340,14 @@ def count_high_rain_low_tests_days(input_data,window=7):
     c = []
     d = []
     e = int((window+1)/2)
-    
-    x = input_data['metadata']['age_binning']['population']
-    y = input_data['region']['population']['age']
-    z = input_data['evolution'].keys()
-    
+    date = input_data['evolution'].keys()
+
     if window%2 == 0:
         ratio = 'Input window is even, cannot be used to compute'
     else:
-        for i in range(len(z)):
-            a.append(input_data['evolution'][list(z)[i]]['weather']['rainfall'])
-            b.append(input_data['evolution'][list(z)[i]]['epidemiology']['tested']['new']['all'])
+        for i in range(len(date)):
+            a.append(input_data['evolution'][list(date)[i]]['weather']['rainfall'])
+            b.append(input_data['evolution'][list(date)[i]]['epidemiology']['tested']['new']['all'])
      
         a1 = a # weather don't need to be averaged
         b1 = compute_running_average(b, window)
@@ -363,7 +357,7 @@ def count_high_rain_low_tests_days(input_data,window=7):
 
         for i in range(0,e):
             c.append(False)
-        for i in range(e,len(z)-e+1):
+        for i in range(e,len(date)-e+1):
             if a2[i] > 0:
                 c.append(True)
             else:
@@ -378,13 +372,13 @@ def count_high_rain_low_tests_days(input_data,window=7):
             for i in range(0,e):
                 d.append(False)
     
-            for i in range(e,len(z)-e+1):
+            for i in range(e,len(date)-e+1):
                 if a2[i] > 0 and b2[i] < 0:
                     d.append(True)
                 else:
                     d.append(False)
         
-            for i in range(len(z)-e+1,len(z)):
+            for i in range(len(date)-e+1,len(date)):
                 d.append(False)
     
             d1 = sum(d)
