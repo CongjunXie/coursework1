@@ -163,7 +163,7 @@ def hospital_vs_confirmed(input_data):
     r = (o,h)   
     return r
 
-def generate_data_plot_confirmed(input_data, sex=False, max_ages=[], status='total'):
+def generate_data_plot_confirmed(input_data, sex=False, max_age=[], status='total'):
     from datetime import datetime
     f=[]
     g=[]
@@ -172,6 +172,9 @@ def generate_data_plot_confirmed(input_data, sex=False, max_ages=[], status='tot
     age_binning_p = input_data['metadata']['age_binning']['population']
     date = input_data['evolution'].keys()
     age_binning_h = input_data['metadata']['age_binning']['hospitalizations']
+
+    class InputError(Exception):
+        pass
 
     if sex == True:
         for i in range(len(date)):
@@ -186,16 +189,16 @@ def generate_data_plot_confirmed(input_data, sex=False, max_ages=[], status='tot
         result.append({'date':data_time,'value':g})
 
     elif sex != False:
-        result = 'Input sex is error'
+        raise InputError('Input sex is not valid')
     
-    elif type(max_ages).__name__ == 'list' and len(max_ages) >= 1:
-        for i in range(len(max_ages)):
+    elif type(max_age).__name__ == 'list' and len(max_age) >= 1:
+        for i in range(len(max_age)):
             h.append([])
 
         for m in range(len(date)):
-            for i in range(len(max_ages)):
+            for i in range(len(max_age)):
                 for j in range(len(age_binning_p)):
-                    if max_ages[i] <= abs(eval(age_binning_p[0]))*(j+1):
+                    if max_age[i] <= abs(eval(age_binning_p[0]))*(j+1):
                         n = input_data['evolution'][list(date)[m]]['epidemiology']['confirmed'][status]['age']
                         
                         for q in range(len(age_binning_h)):
@@ -205,7 +208,7 @@ def generate_data_plot_confirmed(input_data, sex=False, max_ages=[], status='tot
                         h[i].append(sum(n[0:j+1]))
                         break
 
-        for k in range(len(max_ages)):
+        for k in range(len(max_age)):
             if h[k] == []:
                  for m in range(len(date)):
                     n = input_data['evolution'][list(date)[m]]['epidemiology']['confirmed'][status]['age']
@@ -214,16 +217,19 @@ def generate_data_plot_confirmed(input_data, sex=False, max_ages=[], status='tot
         data_time = [datetime.strptime(d, '%Y-%m-%d').date() for d in list(date)]
 
         result=[]
-        for i in range(len(max_ages)):
+        for i in range(len(max_age)):
             result.append({'date':data_time,'value':h[i]})
             
     else:
-        result = 'Input max_age is error'
+        raise InputError('Input max_age is not valid')
      
     return result
 
 def create_confirmed_plot(input_data, sex=False, max_ages=[], status='total', save=False):
     from matplotlib import pyplot as plt
+        
+    class InputError(Exception):
+        pass
 
     fig = plt.figure(figsize=(10, 10))
     
@@ -239,7 +245,7 @@ def create_confirmed_plot(input_data, sex=False, max_ages=[], status='total', sa
             plt.plot('date','value',data=a[1],color='purple',label=status + ' female', linestyle='--')   
     
     elif sex != True and sex != False:
-        return "Input sex is error"
+        raise InputError('Input sex is not valid')
         
     elif type(max_ages).__name__ == 'list' and len(max_ages) >= 1:
         r = 'age'
@@ -266,7 +272,7 @@ def create_confirmed_plot(input_data, sex=False, max_ages=[], status='total', sa
                 else:
                     plt.plot('date','value',data=a[i],label=status + ' younger than ' + str(max_ages[i]), color='pink', linestyle='--')
     else:
-        return "Input age_max is error"
+        raise InputError('Input max_ages is not valid')
     
     region = input_data['region']['name']
     fig.autofmt_xdate()  # To show dates nicely
