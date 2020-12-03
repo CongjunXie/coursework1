@@ -1,55 +1,141 @@
 def load_covid_data(filepath):
     import json
-    return json.loads(open(filepath).read())
+    data = json.loads(open(filepath).read())
+    z = data['evolution'].keys() #years
+
+    if sorted(list(data.keys())) != sorted(['metadata', 'region', 'evolution']):
+        return 'Error1'
+    elif sorted(list(data['metadata'].keys())) != sorted(['time-range', 'age_binning']):
+        return 'Error2'
+    elif sorted(list(data['metadata']['time-range'].keys())) != sorted(['start_date', 'stop_date']):
+        return 'Error3'
+    elif sorted(list(data['metadata']['age_binning'].keys())) != sorted(['hospitalizations', 'population']):
+        return 'Error'
+    elif sorted(list(data['region'].keys())) != sorted(['name', 'key', 'latitude', 'longitude', 'elevation', 'area', 'population', 'open_street_maps', 'noaa_station', 'noaa_distance']):
+        return 'Error'
+    elif sorted(list(data['region']['area'].keys())) != sorted(['total', 'rural', 'urban']):
+        return 'Error'
+    elif sorted(list(data['region']['population'].keys())) != sorted(['total', 'male', 'female', 'age', 'rural', 'urban']):
+        return 'Error'
+    else:
+        pass
+    
+    for i in range(len(z)):
+        if sorted(list(data['evolution'][list(z)[i]].keys())) != sorted(['hospitalizations', 'epidemiology', 'weather', 'government_response']):
+            return 'Error'
+        elif sorted(list(data['evolution'][list(z)[i]]['hospitalizations'].keys())) != sorted(['hospitalized', 'intensive_care', 'ventilator']):
+            return 'Error'
+        elif sorted(list(data['evolution'][list(z)[i]]['hospitalizations']['hospitalized'].keys())) != sorted(['new', 'total', 'current']):
+            return 'Error'
+        elif sorted(list(data['evolution'][list(z)[i]]['hospitalizations']['hospitalized']['new'].keys())) != sorted(['all', 'male', 'female', 'age']):
+            return 'Error'
+        elif sorted(list(data['evolution'][list(z)[i]]['hospitalizations']['hospitalized']['total'].keys())) != sorted(['all', 'male', 'female', 'age']):
+            return 'Error'
+        elif sorted(list(data['evolution'][list(z)[i]]['hospitalizations']['hospitalized']['current'].keys())) != sorted(['all', 'male', 'female', 'age']):
+            return 'Error'
+        elif sorted(list(data['evolution'][list(z)[i]]['hospitalizations']['intensive_care'].keys())) != sorted(['new', 'total', 'current']):
+            return 'Error'
+        elif sorted(list(data['evolution'][list(z)[i]]['hospitalizations']['intensive_care']['new'].keys())) != sorted(['all', 'male', 'female', 'age']):
+            return 'Error'
+        elif sorted(list(data['evolution'][list(z)[i]]['hospitalizations']['intensive_care']['total'].keys())) != sorted(['all', 'male', 'female', 'age']):
+            return 'Error'
+        elif sorted(list(data['evolution'][list(z)[i]]['hospitalizations']['intensive_care']['current'].keys())) != sorted(['all', 'male', 'female', 'age']):
+            return 'Error'
+        elif sorted(list(data['evolution'][list(z)[i]]['hospitalizations']['ventilator'].keys())) != sorted(['new', 'total', 'current']):
+            return 'Error'
+        elif sorted(list(data['evolution'][list(z)[i]]['hospitalizations']['ventilator']['new'].keys())) != sorted(['all', 'male', 'female', 'age']):
+            return 'Error'
+        elif sorted(list(data['evolution'][list(z)[i]]['hospitalizations']['ventilator']['total'].keys())) != sorted(['all', 'male', 'female', 'age']):
+            return 'Error'
+        elif sorted(list(data['evolution'][list(z)[i]]['hospitalizations']['ventilator']['current'].keys())) != sorted(['all', 'male', 'female', 'age']):
+            return 'Error'
+        elif sorted(list(data['evolution'][list(z)[i]]['epidemiology'].keys())) != sorted(['confirmed', 'deceased', 'recovered', 'tested']):
+            return 'Error'
+        elif sorted(list(data['evolution'][list(z)[i]]['epidemiology']['confirmed'].keys())) != sorted(['new', 'total']):
+            return 'Error'
+        elif sorted(list(data['evolution'][list(z)[i]]['epidemiology']['confirmed']['new'].keys())) != sorted(['all', 'male', 'female', 'age']):
+            return 'Error'
+        elif sorted(list(data['evolution'][list(z)[i]]['epidemiology']['confirmed']['total'].keys())) != sorted(['all', 'male', 'female', 'age']):
+            return 'Error'
+        elif sorted(list(data['evolution'][list(z)[i]]['epidemiology']['deceased'].keys())) != sorted(['new', 'total']):
+            return 'Error'
+        elif sorted(list(data['evolution'][list(z)[i]]['epidemiology']['deceased']['new'].keys())) != sorted(['all', 'male', 'female', 'age']):
+            return 'Error'
+        elif sorted(list(data['evolution'][list(z)[i]]['epidemiology']['deceased']['total'].keys())) != sorted(['all', 'male', 'female', 'age']):
+            return 'Error'
+        elif sorted(list(data['evolution'][list(z)[i]]['epidemiology']['recovered'].keys())) != sorted(['new', 'total']):
+            return 'Error'
+        elif sorted(list(data['evolution'][list(z)[i]]['epidemiology']['recovered']['new'].keys())) != sorted(['all', 'male', 'female', 'age']):
+            return 'Error'
+        elif sorted(list(data['evolution'][list(z)[i]]['epidemiology']['recovered']['total'].keys())) != sorted(['all', 'male', 'female', 'age']):
+            return 'Error'
+        elif sorted(list(data['evolution'][list(z)[i]]['epidemiology']['tested'].keys())) != sorted(['new', 'total']):
+            return 'Error'
+        elif sorted(list(data['evolution'][list(z)[i]]['epidemiology']['tested']['new'].keys())) != sorted(['all', 'male', 'female', 'age']):
+            return 'Error'
+        elif sorted(list(data['evolution'][list(z)[i]]['epidemiology']['tested']['total'].keys())) != sorted(['all', 'male', 'female', 'age']):
+            return 'Error'
+        elif sorted(list(data['evolution'][list(z)[i]]['weather'].keys())) != sorted(['temperature', 'rainfall', 'snowfall', 'dew_point', 'relative_humidity']):
+            return 'Error'
+        elif sorted(list(data['evolution'][list(z)[i]]['weather']['temperature'].keys())) != sorted(['average', 'min', 'max']):
+            return 'Error'
+        else:
+            return data   
 
 def cases_per_population_by_age(input_data):
-    x=input_data['metadata']['age_binning']['population']
-    y = input_data['region']['population']['age']
-    z = input_data['evolution'].keys()
-    l = input_data['metadata']['age_binning']['hospitalizations']
-
-    if l == []:
-        a = 'Error: No regions provided'
-    elif list(set(x).intersection(set(l))) == []:
-        a = 'Error: cannot rebin'
-    elif all(y) == False:
-        a = 'Error: no population provided'
+    class SchemeError(Exception):
+        pass
+    
+    if input_data == 'Error':
+        raise SchemeError
     else:
-        a = {}
-        b = []
+        x=input_data['metadata']['age_binning']['population']
+        y = input_data['region']['population']['age']
+        z = input_data['evolution'].keys()
+        l = input_data['metadata']['age_binning']['hospitalizations']
 
-        for m in range(len(x)):
-            a.update({x[m]:[]})
-        for n in range(len(x)):
-            b.append([])
-        
-        if len(x) > len(l):
-            for k in range(len(l)):
-                if x[k] != l[k]:
-                    y[k] = [y[k][p]+y[k+1][p] for p in range(len(y[k]))]
-            for i in range(len(x)):
-                for j in range(len(z)):
-                    c = input_data['evolution'][list(z)[j]]['epidemiology']['confirmed']['total']['age']
-                    b[i].append(c[i]/y[i])
-                    a[x[i]].append((list(z)[j],b[i][j]))
-        elif len(x) < len(l):
-            for i in range(len(x)):
-                for j in range(len(z)):
-                    c = input_data['evolution'][list(z)[j]]['epidemiology']['confirmed']['total']['age']
-                    for q in range(len(l)):
-                        if c[q] == None:
-                            c[q] = 0
-                    if x[i] != l[i]:
-                        c[i] = c[i] + c[i+1]
-                    b[i].append(c[i]/y[i])
-                    a[x[i]].append((list(z)[j],b[i][j]))
+        if l == []:
+            a = 'Error: No regions provided'
+        elif list(set(x).intersection(set(l))) == []:
+            a = 'Error: cannot rebin'
+        elif all(y) == False:
+            a = 'Error: no population provided'
         else:
-            for i in range(len(x)):
-                for j in range(len(z)):
-                    c = input_data['evolution'][list(z)[j]]['epidemiology']['confirmed']['total']['age']
-                    b[i].append(c[i]/y[i])
-                    a[x[i]].append((list(z)[j],b[i][j]))
-    return a
+            a = {}
+            b = []
+
+            for m in range(len(x)):
+                a.update({x[m]:[]})
+            for n in range(len(x)):
+                b.append([])
+        
+            if len(x) > len(l):
+                for k in range(len(l)):
+                    if x[k] != l[k]:
+                        y[k] = [y[k][p]+y[k+1][p] for p in range(len(y[k]))]
+                for i in range(len(x)):
+                    for j in range(len(z)):
+                        c = input_data['evolution'][list(z)[j]]['epidemiology']['confirmed']['total']['age']
+                        b[i].append(c[i]/y[i])
+                        a[x[i]].append((list(z)[j],b[i][j]))
+            elif len(x) < len(l):
+                for i in range(len(x)):
+                    for j in range(len(z)):
+                        c = input_data['evolution'][list(z)[j]]['epidemiology']['confirmed']['total']['age']
+                        for q in range(len(l)):
+                            if c[q] == None:
+                                c[q] = 0
+                        if x[i] != l[i]:
+                            c[i] = c[i] + c[i+1]
+                        b[i].append(c[i]/y[i])
+                        a[x[i]].append((list(z)[j],b[i][j]))
+            else:
+                for i in range(len(x)):
+                    for j in range(len(z)):
+                        c = input_data['evolution'][list(z)[j]]['epidemiology']['confirmed']['total']['age']
+                        b[i].append(c[i]/y[i])
+                        a[x[i]].append((list(z)[j],b[i][j]))
+        return a
 
 def hospital_vs_confirmed(input_data):
     z = input_data['evolution'].keys()
