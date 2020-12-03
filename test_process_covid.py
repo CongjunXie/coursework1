@@ -66,11 +66,14 @@ def test_odd_compute_running_average(): #works as expected with different window
     assert compute_running_average([1,2,3,4,5,6,7,8,9,10],7) == [None,None,None,4,5,6,7,None,None,None]
     assert compute_running_average([1,3,5,7,9,11,13],5) == [None,None,5,7,9,None,None]
     assert compute_running_average([1.5,2.6,3.4,4.9,5.1],3) == [None,2.5,3.6333333333333333,4.466666666666667,None]
-    assert compute_running_average([0, 1, 5, 2, 2, 5],3) == [None, 2.0, 8/3, 3.0, 3.0, None] ###########
-    assert compute_running_average([2, None, 4],3) == [None,3,None] #############
+    assert compute_running_average([0, 1, 5, 2, 2, 5],3) == [None, 2.0, 8/3, 3.0, 3.0, None]
+    assert compute_running_average([2, None, 4],3) == [None,3,None]
 
 def test_even_compute_running_average():
     assert compute_running_average([1,2,3,4,5,6,7,8,9,10],8) == 'Input window is even, cannot be used to compute'
     assert compute_running_average([1,2,3,4,5,6,7,8],4) == 'Input window is even, cannot be used to compute'
     assert compute_running_average([1,2,3,4,5],2) == 'Input window is even, cannot be used to compute'
-    
+
+def test_simple_derivative():
+    assert simple_derivative([1,2,3,4,5,6,7,8]) == [None,1,1,1,1,1,1,1]
+    assert simple_derivative([None, 1, 2, None, 4]) == [None,None,1,None,None]
