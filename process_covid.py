@@ -141,21 +141,21 @@ def cases_per_population_by_age(input_data):
         return a
 
 def hospital_vs_confirmed(input_data):
-    z = input_data['evolution'].keys()
+    date = input_data['evolution'].keys()
+    g = list(date)
     f = []
-    g = list(z)
     h = []
     o = []
     
-    for i in range(len(z)):
-        d = input_data['evolution'][list(z)[i]]['hospitalizations']['hospitalized']['new']['all']
-        e = input_data['evolution'][list(z)[i]]['epidemiology']['confirmed']['new']['all']
+    for i in range(len(date)):
+        d = input_data['evolution'][list(date)[i]]['hospitalizations']['hospitalized']['new']['all']
+        e = input_data['evolution'][list(date)[i]]['epidemiology']['confirmed']['new']['all']
         if e == 0 or e == None or d == None:
             f.append(None)
         else:
             f.append(d/e)
     
-    for j in range(len(z)):
+    for j in range(len(date)):
         if f[j] != None:
             h.append(f[j])
             o.append(g[j])
@@ -169,17 +169,16 @@ def generate_data_plot_confirmed(input_data, sex=False, max_ages=[], status='tot
     g=[]
     h=[]
     result=[]
-    x = input_data['metadata']['age_binning']['population']
-    y = input_data['region']['population']['age']
-    z = input_data['evolution'].keys()
-    l = input_data['metadata']['age_binning']['hospitalizations']
+    age_binning_p = input_data['metadata']['age_binning']['population']
+    date = input_data['evolution'].keys()
+    age_binning_h = input_data['metadata']['age_binning']['hospitalizations']
 
     if sex == True:
-        for i in range(len(z)):
-            f.append(input_data['evolution'][list(z)[i]]['epidemiology']['confirmed'][status]['male'])
-            g.append(input_data['evolution'][list(z)[i]]['epidemiology']['confirmed'][status]['female'])
+        for i in range(len(date)):
+            f.append(input_data['evolution'][list(date)[i]]['epidemiology']['confirmed'][status]['male'])
+            g.append(input_data['evolution'][list(date)[i]]['epidemiology']['confirmed'][status]['female'])
     
-        data_time = [datetime.strptime(d, '%Y-%m-%d').date() for d in list(z)]
+        data_time = [datetime.strptime(d, '%Y-%m-%d').date() for d in list(date)]
         result = [data_time,f,data_time,g]
 
         result=[]
@@ -193,25 +192,26 @@ def generate_data_plot_confirmed(input_data, sex=False, max_ages=[], status='tot
         for i in range(len(max_ages)):
             h.append([])
 
-        for m in range(len(z)):
+        for m in range(len(date)):
             for i in range(len(max_ages)):
-                for j in range(len(x)):
-                    if max_ages[i] <= abs(eval(x[0]))*(j+1):
-                        n = input_data['evolution'][list(z)[m]]['epidemiology']['confirmed'][status]['age']
+                for j in range(len(age_binning_p)):
+                    if max_ages[i] <= abs(eval(age_binning_p[0]))*(j+1):
+                        n = input_data['evolution'][list(date)[m]]['epidemiology']['confirmed'][status]['age']
                         
-                        for q in range(len(l)):
+                        for q in range(len(age_binning_h)):
                             if n[q] == None:
                                 n[q] = 0
                         
                         h[i].append(sum(n[0:j+1]))
                         break
+                    
         for k in range(len(max_ages)):
             if h[k] == []:
-                 for m in range(len(z)):
-                    n = input_data['evolution'][list(z)[m]]['epidemiology']['confirmed'][status]['age']
+                 for m in range(len(date)):
+                    n = input_data['evolution'][list(date)[m]]['epidemiology']['confirmed'][status]['age']
                     h[k].append(sum(n))
         
-        data_time = [datetime.strptime(d, '%Y-%m-%d').date() for d in list(z)]
+        data_time = [datetime.strptime(d, '%Y-%m-%d').date() for d in list(date)]
 
         result=[]
         for i in range(len(max_ages)):
