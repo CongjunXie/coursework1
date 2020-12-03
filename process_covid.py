@@ -2,143 +2,143 @@ def load_covid_data(filepath):
     import json
     data = json.loads(open(filepath).read())
     date = data['evolution'].keys()
+    
+    class SchemeError(Exception):
+        pass
 
     if sorted(list(data.keys())) != sorted(['metadata', 'region', 'evolution']):
-        return 'Error'
+        raise SchemeError('Scheme is not valid')
     elif sorted(list(data['metadata'].keys())) != sorted(['time-range', 'age_binning']):
-        return 'Error'
+        raise SchemeError('Scheme is not valid')
     elif sorted(list(data['metadata']['time-range'].keys())) != sorted(['start_date', 'stop_date']):
-        return 'Error'
+        raise SchemeError('Scheme is not valid')
     elif sorted(list(data['metadata']['age_binning'].keys())) != sorted(['hospitalizations', 'population']):
-        return 'Error'
+        raise SchemeError('Scheme is not valid')
     elif sorted(list(data['region'].keys())) != sorted(['name', 'key', 'latitude', 'longitude', 'elevation', 'area', 'population', 'open_street_maps', 'noaa_station', 'noaa_distance']):
-        return 'Error'
+        raise SchemeError('Scheme is not valid')
     elif sorted(list(data['region']['area'].keys())) != sorted(['total', 'rural', 'urban']):
-        return 'Error'
+        raise SchemeError('Scheme is not valid')
     elif sorted(list(data['region']['population'].keys())) != sorted(['total', 'male', 'female', 'age', 'rural', 'urban']):
-        return 'Error'
+        raise SchemeError('Scheme is not valid')
     else:
         pass
     
     for i in range(len(date)):
         if sorted(list(data['evolution'][list(date)[i]].keys())) != sorted(['hospitalizations', 'epidemiology', 'weather', 'government_response']):
-            return 'Error'
+            raise SchemeError('Scheme is not valid')
         elif sorted(list(data['evolution'][list(date)[i]]['hospitalizations'].keys())) != sorted(['hospitalized', 'intensive_care', 'ventilator']):
-            return 'Error'
+            raise SchemeError('Scheme is not valid')
         elif sorted(list(data['evolution'][list(date)[i]]['hospitalizations']['hospitalized'].keys())) != sorted(['new', 'total', 'current']):
-            return 'Error'
+            raise SchemeError('Scheme is not valid')
         elif sorted(list(data['evolution'][list(date)[i]]['hospitalizations']['hospitalized']['new'].keys())) != sorted(['all', 'male', 'female', 'age']):
-            return 'Error'
+            raise SchemeError('Scheme is not valid')
         elif sorted(list(data['evolution'][list(date)[i]]['hospitalizations']['hospitalized']['total'].keys())) != sorted(['all', 'male', 'female', 'age']):
-            return 'Error'
+            raise SchemeError('Scheme is not valid')
         elif sorted(list(data['evolution'][list(date)[i]]['hospitalizations']['hospitalized']['current'].keys())) != sorted(['all', 'male', 'female', 'age']):
-            return 'Error'
+            raise SchemeError('Scheme is not valid')
         elif sorted(list(data['evolution'][list(date)[i]]['hospitalizations']['intensive_care'].keys())) != sorted(['new', 'total', 'current']):
-            return 'Error'
+            raise SchemeError('Scheme is not valid')
         elif sorted(list(data['evolution'][list(date)[i]]['hospitalizations']['intensive_care']['new'].keys())) != sorted(['all', 'male', 'female', 'age']):
-            return 'Error'
+            raise SchemeError('Scheme is not valid')
         elif sorted(list(data['evolution'][list(date)[i]]['hospitalizations']['intensive_care']['total'].keys())) != sorted(['all', 'male', 'female', 'age']):
-            return 'Error'
+            raise SchemeError('Scheme is not valid')
         elif sorted(list(data['evolution'][list(date)[i]]['hospitalizations']['intensive_care']['current'].keys())) != sorted(['all', 'male', 'female', 'age']):
-            return 'Error'
+            raise SchemeError('Scheme is not valid')
         elif sorted(list(data['evolution'][list(date)[i]]['hospitalizations']['ventilator'].keys())) != sorted(['new', 'total', 'current']):
-            return 'Error'
+            raise SchemeError('Scheme is not valid')
         elif sorted(list(data['evolution'][list(date)[i]]['hospitalizations']['ventilator']['new'].keys())) != sorted(['all', 'male', 'female', 'age']):
-            return 'Error'
+            raise SchemeError('Scheme is not valid')
         elif sorted(list(data['evolution'][list(date)[i]]['hospitalizations']['ventilator']['total'].keys())) != sorted(['all', 'male', 'female', 'age']):
-            return 'Error'
+            raise SchemeError('Scheme is not valid')
         elif sorted(list(data['evolution'][list(date)[i]]['hospitalizations']['ventilator']['current'].keys())) != sorted(['all', 'male', 'female', 'age']):
-            return 'Error'
+            raise SchemeError('Scheme is not valid')
         elif sorted(list(data['evolution'][list(date)[i]]['epidemiology'].keys())) != sorted(['confirmed', 'deceased', 'recovered', 'tested']):
-            return 'Error'
+            raise SchemeError('Scheme is not valid')
         elif sorted(list(data['evolution'][list(date)[i]]['epidemiology']['confirmed'].keys())) != sorted(['new', 'total']):
-            return 'Error'
+            raise SchemeError('Scheme is not valid')
         elif sorted(list(data['evolution'][list(date)[i]]['epidemiology']['confirmed']['new'].keys())) != sorted(['all', 'male', 'female', 'age']):
-            return 'Error'
+            raise SchemeError('Scheme is not valid')
         elif sorted(list(data['evolution'][list(date)[i]]['epidemiology']['confirmed']['total'].keys())) != sorted(['all', 'male', 'female', 'age']):
-            return 'Error'
+            raise SchemeError('Scheme is not valid')
         elif sorted(list(data['evolution'][list(date)[i]]['epidemiology']['deceased'].keys())) != sorted(['new', 'total']):
-            return 'Error'
+            raise SchemeError('Scheme is not valid')
         elif sorted(list(data['evolution'][list(date)[i]]['epidemiology']['deceased']['new'].keys())) != sorted(['all', 'male', 'female', 'age']):
-            return 'Error'
+            raise SchemeError('Scheme is not valid')
         elif sorted(list(data['evolution'][list(date)[i]]['epidemiology']['deceased']['total'].keys())) != sorted(['all', 'male', 'female', 'age']):
-            return 'Error'
+            raise SchemeError('Scheme is not valid')
         elif sorted(list(data['evolution'][list(date)[i]]['epidemiology']['recovered'].keys())) != sorted(['new', 'total']):
-            return 'Error'
+            raise SchemeError('Scheme is not valid')
         elif sorted(list(data['evolution'][list(date)[i]]['epidemiology']['recovered']['new'].keys())) != sorted(['all', 'male', 'female', 'age']):
-            return 'Error'
+            raise SchemeError('Scheme is not valid')
         elif sorted(list(data['evolution'][list(date)[i]]['epidemiology']['recovered']['total'].keys())) != sorted(['all', 'male', 'female', 'age']):
-            return 'Error'
+            raise SchemeError('Scheme is not valid')
         elif sorted(list(data['evolution'][list(date)[i]]['epidemiology']['tested'].keys())) != sorted(['new', 'total']):
-            return 'Error'
+            raise SchemeError('Scheme is not valid')
         elif sorted(list(data['evolution'][list(date)[i]]['epidemiology']['tested']['new'].keys())) != sorted(['all', 'male', 'female', 'age']):
-            return 'Error'
+            raise SchemeError('Scheme is not valid')
         elif sorted(list(data['evolution'][list(date)[i]]['epidemiology']['tested']['total'].keys())) != sorted(['all', 'male', 'female', 'age']):
-            return 'Error'
+            raise SchemeError('Scheme is not valid')
         elif sorted(list(data['evolution'][list(date)[i]]['weather'].keys())) != sorted(['temperature', 'rainfall', 'snowfall', 'dew_point', 'relative_humidity']):
-            return 'Error'
+            raise SchemeError('Scheme is not valid')
         elif sorted(list(data['evolution'][list(date)[i]]['weather']['temperature'].keys())) != sorted(['average', 'min', 'max']):
-            return 'Error'
+            raise SchemeError('Scheme is not valid')
         else:
             return data   
 
 def cases_per_population_by_age(input_data):
-    class SchemeError(Exception):
+    age_binning_p = input_data['metadata']['age_binning']['population']
+    age_population = input_data['region']['population']['age']
+    date = input_data['evolution'].keys()
+    age_binning_h = input_data['metadata']['age_binning']['hospitalizations']
+
+    class rangeError(Exception):
         pass
-    
-    if input_data == 'Error':
-        raise SchemeError
+
+    if age_binning_h == []:
+        raise rangeError('No age_binning provided')
+    elif list(set(age_binning_p).intersection(set(age_binning_h))) == []:
+        raise rangeError('Can not be rebin')
+    elif all(age_population) == False:
+        raise rangeError('No age_population provided')
     else:
-        age_binning_p = input_data['metadata']['age_binning']['population']
-        age_population = input_data['region']['population']['age']
-        date = input_data['evolution'].keys()
-        age_binning_h = input_data['metadata']['age_binning']['hospitalizations']
+        a = {}
+        b = []
 
-        if age_binning_h == []:
-            a = 'Error: No regions provided'
-        elif list(set(age_binning_p).intersection(set(age_binning_h))) == []:
-            a = 'Error: cannot rebin'
-        elif all(age_population) == False:
-            a = 'Error: no population provided'
-        else:
-            a = {}
-            b = []
-
-            for m in range(len(age_binning_p)):
-                a.update({age_binning_p[m]:[]})
-                b.append([])
+        for m in range(len(age_binning_p)):
+            a.update({age_binning_p[m]:[]})
+            b.append([])
         
-            if len(age_binning_p) > len(age_binning_h):
-                for k in range(len(age_binning_h)):
-                    if age_binning_p[k] != age_binning_h[k]:
-                        age_population[k] = [age_population[k][p]+age_population[k+1][p] for p in range(len(age_population[k]))]
+        if len(age_binning_p) > len(age_binning_h):
+            for k in range(len(age_binning_h)):
+                if age_binning_p[k] != age_binning_h[k]:
+                    age_population[k] = [age_population[k][p]+age_population[k+1][p] for p in range(len(age_population[k]))]
 
-                for i in range(len(age_binning_p)):
-                    for j in range(len(date)):
-                        c = input_data['evolution'][list(date)[j]]['epidemiology']['confirmed']['total']['age']
-                        b[i].append(c[i]/age_population[i])
-                        a[age_binning_p[i]].append((list(date)[j],b[i][j]))
+            for i in range(len(age_binning_p)):
+                for j in range(len(date)):
+                    c = input_data['evolution'][list(date)[j]]['epidemiology']['confirmed']['total']['age']
+                    b[i].append(c[i]/age_population[i])
+                    a[age_binning_p[i]].append((list(date)[j],b[i][j]))
 
-            elif len(age_binning_p) < len(age_binning_h):
-                for i in range(len(age_binning_p)):
-                    for j in range(len(date)):
-                        c = input_data['evolution'][list(date)[j]]['epidemiology']['confirmed']['total']['age']
+        elif len(age_binning_p) < len(age_binning_h):
+            for i in range(len(age_binning_p)):
+                for j in range(len(date)):
+                    c = input_data['evolution'][list(date)[j]]['epidemiology']['confirmed']['total']['age']
 
-                        for q in range(len(age_binning_h)):
-                            if c[q] == None:
-                                c[q] = 0
+                    for q in range(len(age_binning_h)):
+                        if c[q] == None:
+                            c[q] = 0
                                 
-                        if age_binning_p[i] != age_binning_h[i]:
-                            c[i] = c[i] + c[i+1]
-                        b[i].append(c[i]/age_population[i])
-                        a[age_binning_p[i]].append((list(date)[j],b[i][j]))
-            else:
-                for i in range(len(age_binning_p)):
-                    for j in range(len(date)):
-                        c = input_data['evolution'][list(date)[j]]['epidemiology']['confirmed']['total']['age']
-                        b[i].append(c[i]/age_population[i])
-                        a[age_binning_p[i]].append((list(date)[j],b[i][j]))
-        return a
+                    if age_binning_p[i] != age_binning_h[i]:
+                        c[i] = c[i] + c[i+1]
+                    b[i].append(c[i]/age_population[i])
+                    a[age_binning_p[i]].append((list(date)[j],b[i][j]))
+        else:
+            for i in range(len(age_binning_p)):
+                for j in range(len(date)):
+                    c = input_data['evolution'][list(date)[j]]['epidemiology']['confirmed']['total']['age']
+                    b[i].append(c[i]/age_population[i])
+                    a[age_binning_p[i]].append((list(date)[j],b[i][j]))
+    return a
 
 def hospital_vs_confirmed(input_data):
     date = input_data['evolution'].keys()
