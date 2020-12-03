@@ -311,7 +311,7 @@ def compute_running_average(data, window):
             o = sum(p is None for p in e)
         
             if window-o == 0:
-                d.append(0)
+                d.append(None)
             else:
                 for j in range(i-a+1,i+a):
                     if data[j] == None:

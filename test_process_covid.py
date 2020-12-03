@@ -68,6 +68,7 @@ def test_odd_compute_running_average(): #works as expected with different window
     assert compute_running_average([1.5,2.6,3.4,4.9,5.1],3) == [None,2.5,3.6333333333333333,4.466666666666667,None]
     assert compute_running_average([0, 1, 5, 2, 2, 5],3) == [None, 2.0, 8/3, 3.0, 3.0, None]
     assert compute_running_average([2, None, 4],3) == [None,3,None]
+    assert compute_running_average([0, 3, None, None, None, 6, 9], 3) == [None, 1.5, 3, None, 6, 7.5, None]
 
 def test_even_compute_running_average():
     assert compute_running_average([1,2,3,4,5,6,7,8,9,10],8) == 'Input window is even, cannot be used to compute'
