@@ -3,93 +3,93 @@ def load_covid_data(filepath):
     data = json.loads(open(filepath).read())
     date = data['evolution'].keys()
     
-    class SchemeError(Exception):
+    class SchemaError(Exception):
         pass
 
     if sorted(list(data.keys())) != sorted(['metadata', 'region', 'evolution']):
-        raise SchemeError('Scheme is not valid')
+        raise SchemaError('Schema is not valid')
     elif sorted(list(data['metadata'].keys())) != sorted(['time-range', 'age_binning']):
-        raise SchemeError('Scheme is not valid')
+        raise SchemaError('Schema is not valid')
     elif sorted(list(data['metadata']['time-range'].keys())) != sorted(['start_date', 'stop_date']):
-        raise SchemeError('Scheme is not valid')
+        raise SchemaError('Schema is not valid')
     elif type(data['metadata']['time-range']['start_date']) != str:
-        raise SchemeError('Scheme is not valid')
+        raise SchemaError('Schema is not valid')
     elif type(data['metadata']['time-range']['stop_date']) != str:
-        raise SchemeError('Scheme is not valid')
+        raise SchemaError('Schema is not valid')
     elif sorted(list(data['metadata']['age_binning'].keys())) != sorted(['hospitalizations', 'population']):
-        raise SchemeError('Scheme is not valid')
+        raise SchemaError('Schema is not valid')
     elif type(data['metadata']['age_binning']['hospitalizations']) != list:
-        raise SchemeError('Scheme is not valid')
+        raise SchemaError('Schema is not valid')
     elif type(data['metadata']['age_binning']['population']) != list:
-        raise SchemeError('Scheme is not valid')    
+        raise SchemaError('Schema is not valid')    
     elif sorted(list(data['region'].keys())) != sorted(['name', 'key', 'latitude', 'longitude', 'elevation', 'area', 'population', 'open_street_maps', 'noaa_station', 'noaa_distance']):
-        raise SchemeError('Scheme is not valid')
+        raise SchemaError('Schema is not valid')
     elif sorted(list(data['region']['area'].keys())) != sorted(['total', 'rural', 'urban']):
-        raise SchemeError('Scheme is not valid')
+        raise SchemaError('Schema is not valid')
     elif sorted(list(data['region']['population'].keys())) != sorted(['total', 'male', 'female', 'age', 'rural', 'urban']):
-        raise SchemeError('Scheme is not valid')
+        raise SchemaError('Schema is not valid')
     else:
         pass
     
     for i in range(len(date)):
         if sorted(list(data['evolution'][list(date)[i]].keys())) != sorted(['hospitalizations', 'epidemiology', 'weather', 'government_response']):
-            raise SchemeError('Scheme is not valid')
+            raise SchemaError('Schema is not valid')
         elif sorted(list(data['evolution'][list(date)[i]]['hospitalizations'].keys())) != sorted(['hospitalized', 'intensive_care', 'ventilator']):
-            raise SchemeError('Scheme is not valid')
+            raise SchemaError('Schema is not valid')
         elif sorted(list(data['evolution'][list(date)[i]]['hospitalizations']['hospitalized'].keys())) != sorted(['new', 'total', 'current']):
-            raise SchemeError('Scheme is not valid')
+            raise SchemaError('Schema is not valid')
         elif sorted(list(data['evolution'][list(date)[i]]['hospitalizations']['hospitalized']['new'].keys())) != sorted(['all', 'male', 'female', 'age']):
-            raise SchemeError('Scheme is not valid')
+            raise SchemaError('Schema is not valid')
         elif sorted(list(data['evolution'][list(date)[i]]['hospitalizations']['hospitalized']['total'].keys())) != sorted(['all', 'male', 'female', 'age']):
-            raise SchemeError('Scheme is not valid')
+            raise SchemaError('Schema is not valid')
         elif sorted(list(data['evolution'][list(date)[i]]['hospitalizations']['hospitalized']['current'].keys())) != sorted(['all', 'male', 'female', 'age']):
-            raise SchemeError('Scheme is not valid')
+            raise SchemaError('Schema is not valid')
         elif sorted(list(data['evolution'][list(date)[i]]['hospitalizations']['intensive_care'].keys())) != sorted(['new', 'total', 'current']):
-            raise SchemeError('Scheme is not valid')
+            raise SchemaError('Schema is not valid')
         elif sorted(list(data['evolution'][list(date)[i]]['hospitalizations']['intensive_care']['new'].keys())) != sorted(['all', 'male', 'female', 'age']):
-            raise SchemeError('Scheme is not valid')
+            raise SchemaError('Schema is not valid')
         elif sorted(list(data['evolution'][list(date)[i]]['hospitalizations']['intensive_care']['total'].keys())) != sorted(['all', 'male', 'female', 'age']):
-            raise SchemeError('Scheme is not valid')
+            raise SchemaError('Schema is not valid')
         elif sorted(list(data['evolution'][list(date)[i]]['hospitalizations']['intensive_care']['current'].keys())) != sorted(['all', 'male', 'female', 'age']):
-            raise SchemeError('Scheme is not valid')
+            raise SchemaError('Schema is not valid')
         elif sorted(list(data['evolution'][list(date)[i]]['hospitalizations']['ventilator'].keys())) != sorted(['new', 'total', 'current']):
-            raise SchemeError('Scheme is not valid')
+            raise SchemaError('Schema is not valid')
         elif sorted(list(data['evolution'][list(date)[i]]['hospitalizations']['ventilator']['new'].keys())) != sorted(['all', 'male', 'female', 'age']):
-            raise SchemeError('Scheme is not valid')
+            raise SchemaError('Schema is not valid')
         elif sorted(list(data['evolution'][list(date)[i]]['hospitalizations']['ventilator']['total'].keys())) != sorted(['all', 'male', 'female', 'age']):
-            raise SchemeError('Scheme is not valid')
+            raise SchemaError('Schema is not valid')
         elif sorted(list(data['evolution'][list(date)[i]]['hospitalizations']['ventilator']['current'].keys())) != sorted(['all', 'male', 'female', 'age']):
-            raise SchemeError('Scheme is not valid')
+            raise SchemaError('Schema is not valid')
         elif sorted(list(data['evolution'][list(date)[i]]['epidemiology'].keys())) != sorted(['confirmed', 'deceased', 'recovered', 'tested']):
-            raise SchemeError('Scheme is not valid')
+            raise SchemaError('Schema is not valid')
         elif sorted(list(data['evolution'][list(date)[i]]['epidemiology']['confirmed'].keys())) != sorted(['new', 'total']):
-            raise SchemeError('Scheme is not valid')
+            raise SchemaError('Schema is not valid')
         elif sorted(list(data['evolution'][list(date)[i]]['epidemiology']['confirmed']['new'].keys())) != sorted(['all', 'male', 'female', 'age']):
-            raise SchemeError('Scheme is not valid')
+            raise SchemaError('Schema is not valid')
         elif sorted(list(data['evolution'][list(date)[i]]['epidemiology']['confirmed']['total'].keys())) != sorted(['all', 'male', 'female', 'age']):
-            raise SchemeError('Scheme is not valid')
+            raise SchemaError('Schema is not valid')
         elif sorted(list(data['evolution'][list(date)[i]]['epidemiology']['deceased'].keys())) != sorted(['new', 'total']):
-            raise SchemeError('Scheme is not valid')
+            raise SchemaError('Schema is not valid')
         elif sorted(list(data['evolution'][list(date)[i]]['epidemiology']['deceased']['new'].keys())) != sorted(['all', 'male', 'female', 'age']):
-            raise SchemeError('Scheme is not valid')
+            raise SchemaError('Schema is not valid')
         elif sorted(list(data['evolution'][list(date)[i]]['epidemiology']['deceased']['total'].keys())) != sorted(['all', 'male', 'female', 'age']):
-            raise SchemeError('Scheme is not valid')
+            raise SchemaError('Schema is not valid')
         elif sorted(list(data['evolution'][list(date)[i]]['epidemiology']['recovered'].keys())) != sorted(['new', 'total']):
-            raise SchemeError('Scheme is not valid')
+            raise SchemaError('Schema is not valid')
         elif sorted(list(data['evolution'][list(date)[i]]['epidemiology']['recovered']['new'].keys())) != sorted(['all', 'male', 'female', 'age']):
-            raise SchemeError('Scheme is not valid')
+            raise SchemaError('Schema is not valid')
         elif sorted(list(data['evolution'][list(date)[i]]['epidemiology']['recovered']['total'].keys())) != sorted(['all', 'male', 'female', 'age']):
-            raise SchemeError('Scheme is not valid')
+            raise SchemaError('Schema is not valid')
         elif sorted(list(data['evolution'][list(date)[i]]['epidemiology']['tested'].keys())) != sorted(['new', 'total']):
-            raise SchemeError('Scheme is not valid')
+            raise SchemaError('Schema is not valid')
         elif sorted(list(data['evolution'][list(date)[i]]['epidemiology']['tested']['new'].keys())) != sorted(['all', 'male', 'female', 'age']):
-            raise SchemeError('Scheme is not valid')
+            raise SchemaError('Schema is not valid')
         elif sorted(list(data['evolution'][list(date)[i]]['epidemiology']['tested']['total'].keys())) != sorted(['all', 'male', 'female', 'age']):
-            raise SchemeError('Scheme is not valid')
+            raise SchemaError('Schema is not valid')
         elif sorted(list(data['evolution'][list(date)[i]]['weather'].keys())) != sorted(['temperature', 'rainfall', 'snowfall', 'dew_point', 'relative_humidity']):
-            raise SchemeError('Scheme is not valid')
+            raise SchemaError('Schema is not valid')
         elif sorted(list(data['evolution'][list(date)[i]]['weather']['temperature'].keys())) != sorted(['average', 'min', 'max']):
-            raise SchemeError('Scheme is not valid')
+            raise SchemaError('Schema is not valid')
         else:
             return data   
 
