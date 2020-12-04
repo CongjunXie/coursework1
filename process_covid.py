@@ -104,48 +104,75 @@ def cases_per_population_by_age(input_data):
 
     if age_binning_h == []:
         raise rangeError('No age_binning provided')
-    elif list(set(age_binning_p).intersection(set(age_binning_h))) == []:
-        raise rangeError('Can not be rebin')
     elif all(age_population) == False:
         raise rangeError('No age_population provided')
     else:
         a = {}
         b = []
+        x = []
+        y = []
 
-        for m in range(len(age_binning_p)):
-            a.update({age_binning_p[m]:[]})
-            b.append([])
+        for i in range(len(age_binning_p)):
+            x.append(min(age_binning_p[i].split('-',1)))
+            x.append(max(age_binning_p[i].split('-',1)))
+            
+        for j in range(len(age_binning_h)):
+            y.append(min(age_binning_h[j].split('-',1)))
+            y.append(max(age_binning_h[j].split('-',1)))
         
         if len(age_binning_p) > len(age_binning_h):
-            for k in range(len(age_binning_h)):
-                if age_binning_p[k] != age_binning_h[k]:
-                    age_population[k] = [age_population[k][p]+age_population[k+1][p] for p in range(len(age_population[k]))]
+            if set(x) > set(y):
+                for m in range(len(age_binning_h)): 
+                    a.update({age_binning_h[m]:[]})
+                    b.append([])
 
-            for i in range(len(age_binning_p)):
-                for j in range(len(date)):
-                    c = input_data['evolution'][list(date)[j]]['epidemiology']['confirmed']['total']['age']
-                    b[i].append(c[i]/age_population[i])
-                    a[age_binning_p[i]].append((list(date)[j],b[i][j]))
+                for k in range(len(age_binning_h)):
+                    if age_binning_p[k] != age_binning_h[k]:
+                        age_population[k] = age_population[k]+age_population[k+1]
+
+                for i in range(len(age_binning_h)):
+                    for j in range(len(date)):
+                        c = input_data['evolution'][list(date)[j]]['epidemiology']['confirmed']['total']['age']
+                        b[i].append(c[i]/age_population[i])
+                        a[age_binning_h[i]].append((list(date)[j],b[i][j]))
+            else:
+                raise rangeError('Cannot be rebin')
 
         elif len(age_binning_p) < len(age_binning_h):
-            for i in range(len(age_binning_p)):
-                for j in range(len(date)):
-                    c = input_data['evolution'][list(date)[j]]['epidemiology']['confirmed']['total']['age']
+            if set(x) < set(y):
+                for m in range(len(age_binning_p)): ####
+                    a.update({age_binning_p[m]:[]})
+                    b.append([])
+                    
+                for i in range(len(age_binning_p)):
+                    for j in range(len(date)):
+                        c = input_data['evolution'][list(date)[j]]['epidemiology']['confirmed']['total']['age']
 
-                    for q in range(len(age_binning_h)):
-                        if c[q] == None:
-                            c[q] = 0
+                        for q in range(len(c)):
+                            if c[q] == None:
+                                c[q] = 0
                                 
-                    if age_binning_p[i] != age_binning_h[i]:
-                        c[i] = c[i] + c[i+1]
-                    b[i].append(c[i]/age_population[i])
-                    a[age_binning_p[i]].append((list(date)[j],b[i][j]))
+                        if age_binning_p[i] != age_binning_h[i]:
+                            c[i] = c[i] + c[i+1]
+
+                        b[i].append(c[i]/age_population[i])
+                        a[age_binning_p[i]].append((list(date)[j],b[i][j]))
+            else:
+                raise rangeError('Cannot be rebin')
+
         else:
-            for i in range(len(age_binning_p)):
-                for j in range(len(date)):
-                    c = input_data['evolution'][list(date)[j]]['epidemiology']['confirmed']['total']['age']
-                    b[i].append(c[i]/age_population[i])
-                    a[age_binning_p[i]].append((list(date)[j],b[i][j]))
+            if set(x) != set(y):
+                raise rangeError('Cannot be rebin')
+            else:
+                for m in range(len(age_binning_h)): ####
+                    a.update({age_binning_h[m]:[]})
+                    b.append([])
+
+                for i in range(len(age_binning_p)):
+                    for j in range(len(date)):
+                        c = input_data['evolution'][list(date)[j]]['epidemiology']['confirmed']['total']['age']
+                        b[i].append(c[i]/age_population[i])
+                        a[age_binning_p[i]].append((list(date)[j],b[i][j]))
     return a
 
 def hospital_vs_confirmed(input_data):

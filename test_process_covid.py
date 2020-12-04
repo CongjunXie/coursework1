@@ -13,7 +13,41 @@ data_file = "ER-Mi-EV_2020-03-16_2020-04-24.json"
 data_er = load_covid_data(data_directory / data_file)
 
 #def tset_load_covid_data: #throws a meaningful error if the structure of the file doesn’t match with what’s expected.
+
+def test_cases_per_population_by_age_cannot_rebin(): #negative test
+    input_data = {'metadata':
+    {'age_binning':
+        {'population':['0-9', '10-19', '20-29', '30-39', '40-49', '50-'],
+        'hospitalizations':['0-19', '20-39', '40-']}},
+    'region':{'population':{'age':1000}},
+    'evolution':{'2020-8-15':100,'2020-8-16':100}}
+
+    assert cases_per_population_by_age(input_data) == 'Error'
+
+def test_cases_per_population_by_age_rebin_1():
+    input_data = {'metadata':
+    {'age_binning':
+        {'population':['0-9', '10-19', '20-29', '30-39', '40-49', '50-'],
+        'hospitalizations':['0-19', '20-39', '40-']}},
+    'region':{'population':{'age':[1,2,3,4,5,6]}},
+    'evolution':{'2020-8-15':{'epidemiology':{'confirmed':{'total':{'age':[1,2,3]}}}},
+                  '2020-8-16':{'epidemiology':{'confirmed':{'total':{'age':[4,5,6]}}}},
+                 '2020-8-17':{'epidemiology':{'confirmed':{'total':{'age':[7,8,9]}}}}}}
+
+    assert list(cases_per_population_by_age(input_data).keys()) == ['0-19', '20-39', '40-']
+
+def test_cases_per_population_by_age_rebin_2():
+    input_data = {'metadata':
+    {'age_binning':
+        {'population':['0-19', '20-39', '40-'],
+        'hospitalizations':['0-9', '10-19', '20-29', '30-39', '40-49', '50-']}},
+    'region':{'population':{'age':[1,2,3]}},
+    'evolution':{'2020-8-15':{'epidemiology':{'confirmed':{'total':{'age':[1,2,3,4,5,6]}}}},
+                  '2020-8-16':{'epidemiology':{'confirmed':{'total':{'age':[2,4,6,8,10,12]}}}},
+                 '2020-8-17':{'epidemiology':{'confirmed':{'total':{'age':[3,2,5,8,1,6]}}}}}}
     
+    assert list(cases_per_population_by_age(input_data).keys()) == ['0-19', '20-39', '40-']
+
 def test_hospital_vs_confirmed(): #create a set of data myself and change the variables
     input_data = {'evolution':
     {'2020-03-16':
