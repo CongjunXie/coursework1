@@ -12,8 +12,16 @@ def load_covid_data(filepath):
         raise SchemeError('Scheme is not valid')
     elif sorted(list(data['metadata']['time-range'].keys())) != sorted(['start_date', 'stop_date']):
         raise SchemeError('Scheme is not valid')
+    elif type(data['metadata']['time-range']['start_date']) != str:
+        raise SchemeError('Scheme is not valid')
+    elif type(data['metadata']['time-range']['stop_date']) != str:
+        raise SchemeError('Scheme is not valid')
     elif sorted(list(data['metadata']['age_binning'].keys())) != sorted(['hospitalizations', 'population']):
         raise SchemeError('Scheme is not valid')
+    elif type(data['metadata']['age_binning']['hospitalizations']) != list:
+        raise SchemeError('Scheme is not valid')
+    elif type(data['metadata']['age_binning']['population']) != list:
+        raise SchemeError('Scheme is not valid')    
     elif sorted(list(data['region'].keys())) != sorted(['name', 'key', 'latitude', 'longitude', 'elevation', 'area', 'population', 'open_street_maps', 'noaa_station', 'noaa_distance']):
         raise SchemeError('Scheme is not valid')
     elif sorted(list(data['region']['area'].keys())) != sorted(['total', 'rural', 'urban']):
@@ -150,8 +158,10 @@ def hospital_vs_confirmed(input_data):
     for i in range(len(date)):
         d = input_data['evolution'][list(date)[i]]['hospitalizations']['hospitalized']['new']['all']
         e = input_data['evolution'][list(date)[i]]['epidemiology']['confirmed']['new']['all']
-        if e == 0 or e == None or d == None:
+        if e == None or d == None:
             f.append(None)
+        elif e == 0:
+            f.append(0) 
         else:
             f.append(d/e)
     
@@ -370,7 +380,9 @@ def count_high_rain_low_tests_days(input_data,window=7):
         for i in range(0,e):
             c.append(False)
         for i in range(e,len(date)-e+1):
-            if a2[i] > 0:
+            if a2[i] == None:
+                c.append(False)
+            elif a2[i] > 0:
                 c.append(True)
             else:
                 c.append(False)
@@ -385,7 +397,9 @@ def count_high_rain_low_tests_days(input_data,window=7):
                 d.append(False)
     
             for i in range(e,len(date)-e+1):
-                if a2[i] > 0 and b2[i] < 0:
+                if a2[i] == None or b2[i] == None:
+                    d.append(False)
+                elif a2[i] > 0 and b2[i] < 0:
                     d.append(True)
                 else:
                     d.append(False)
