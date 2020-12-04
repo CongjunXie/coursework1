@@ -12,7 +12,12 @@ data_directory = Path("covid_data")
 data_file = "ER-Mi-EV_2020-03-16_2020-04-24.json"
 data_er = load_covid_data(data_directory / data_file)
 
-#def tset_load_covid_data: #throws a meaningful error if the structure of the file doesn’t match with what’s expected.
+def test_load_covid_data(): #throws a meaningful error if the structure of the file doesn’t match with what’s expected.
+    try:
+        data = load_covid_data(data_directory / data_file)
+        assert data == 'Error'
+    except:
+        print('The Schema is OK')
 
 def test_cases_per_population_by_age_cannot_rebin(): #Example in pdf
     input_data = {'metadata':
